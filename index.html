@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grønli Registrar Database System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            text-align: center;
+        }
+        
+        .header h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+        
+        .header p {
+            color: #7f8c8d;
+            font-size: 1.1em;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+        
+        .card h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #34495e;
+            font-weight: 600;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e1e8ed;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+        
+        .btn {
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin-right: 10px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        .btn-success {
+            background: linear-gradient(45deg, #27ae60, #229954);
+        }
+        
+        .btn-warning {
+            background: linear-gradient(45deg, #f39c12, #e67e22);
+        }
+        
+        .documents-list {
+            grid-column: 1 / -1;
+        }
+        
+        .document-item {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: transform 0.2s;
+        }
+        
+        .document-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .document-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .document-title {
+            font-weight: bold;
+            color: #2c3e50;
+            font-size: 1.2em;
+        }
+        
+        .document-series {
+            color: #7f8c8d;
+            font-family: monospace;
+            background: #ecf0f1;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+        
+        .document-status {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .status-komplett {
+            background: #d5f4e6;
+            color: #27ae60;
+        }
+        
+        .status-under-behandling {
+            background: #ffeaa7;
+            color: #e17055;
+        }
+        
+        .status-arkivert {
+            background: #ddd6fe;
+            color: #8b5cf6;
+        }
+        
+        .document-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #e9ecef;
+        }
+        
+        .detail-item {
+            text-align: center;
+        }
+        
+        .detail-label {
+            font-size: 12px;
+            color: #7f8c8d;
+            margin-bottom: 5px;
+        }
+        
+        .detail-value {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .file-upload {
+            border: 2px dashed #3498db;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            background: #f8f9fa;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .file-upload:hover {
+            background: #e3f2fd;
+            border-color: #2980b9;
+        }
+        
+        .file-upload.dragover {
+            background: #e3f2fd;
+            border-color: #2980b9;
+        }
+        
+        .roles-section {
+            grid-column: 1 / -1;
+            margin-top: 20px;
+        }
+        
+        .roles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .role-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .role-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .role-identity {
+            font-size: 1.1em;
+            margin-bottom: 8px;
+            background: rgba(255,255,255,0.2);
+            padding: 8px;
+            border-radius: 6px;
+        }
+        
+        .role-notes {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            .document-details {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Grønli Registrar Database System</h1>
+            <p>Dokumentarkiv med juridisk registrering og notarisk attestering</p>
+        </div>
+        
+        <div class="main-content">
+            <!-- Document Registration Form -->
+            <div class="card">
+                <h2>📄 Registrer Dokument</h2>
+                <form id="documentForm">
+                    <div class="form-group">
+                        <label for="title">Dokumenttittel:</label>
+                        <input type="text" id="title" name="title" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="seriesId">Serienummer:</label>
+                        <input type="text" id="seriesId" name="seriesId" required placeholder="f.eks. PC-FN-3849">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="jurisdiction">Jurisdiksjon:</label>
+                        <select id="jurisdiction" name="jurisdiction" required>
+                            <option value="">Velg jurisdiksjon</option>
+                            <option value="Grønli Court of Records">Grønli Court of Records</option>
+                            <option value="Sovereign House">Sovereign House</option>
+                            <option value="AKFNS">AKFNS</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="receivedBy">Mottatt av:</label>
+                        <select id="receivedBy" name="receivedBy" required>
+                            <option value="">Velg mottaker</option>
+                            <option value="Kim Terje Rudschinat Grønli">Kim Terje Rudschinat Grønli</option>
+                            <option value="Grønli Court of Records">Grønli Court of Records</option>
+                            <option value="Kim-Terje Rudschinat Grønli (NP-2025)">Kim-Terje Rudschinat Grønli (NP-2025)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="notes">Notater:</label>
+                        <textarea id="notes" name="notes" rows="3"></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn">Registrer Dokument</button>
+                </form>
+            </div>
+            
+            <!-- File Upload Section -->
+            <div class="card">
+                <h2>📎 Last opp filer</h2>
+                
+                <div class="form-group">
+                    <label>Cover Page:</label>
+                    <div class="file-upload" id="coverPageUpload">
+                        <div>📄 Dra og slipp cover page her eller klikk for å velge</div>
+                        <input type="file" id="coverPageFile" accept=".pdf,.jpg,.jpeg,.png" style="display: none;">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Segl/Stempel:</label>
+                    <div class="file-upload" id="sealUpload">
+                        <div>🏛️ Dra og slipp segl her eller klikk for å velge</div>
+                        <input type="file" id="sealFile" accept=".jpg,.jpeg,.png" style="display: none;">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Notarisk Signatur:</label>
+                    <div class="file-upload" id="signatureUpload">
+                        <div>✍️ Dra og slipp signatur her eller klikk for å velge</div>
+                        <input type="file" id="signatureFile" accept=".jpg,.jpeg,.png,.pdf" style="display: none;">
+                    </div>
+                </div>
+                
+                <button type="button" class="btn btn-success" onclick="processNotarization()">🏛️ Notariser Dokument</button>
+                <button type="button" class="btn btn-warning" onclick="archiveDocument()">📚 Arkiver Dokument</button>
+            </div>
+        </div>
+        
+        <!-- Key Roles Section -->
+        <div class="card roles-section">
+            <h2>🔐 Nøkkelroller & Identiteter for Tillit & Governance</h2>
+            <div class="roles-grid">
+                <div class="role-card">
+                    <div class="role-title">Grantor / Settlor</div>
+                    <div class="role-identity">Kim Terje Rudschinat Grønli<br>(PC-FN-3849, KTR-2025)</div>
+                    <div class="role-notes">Living sovereign, personal authority with proof-of-life</div>
+                </div>
+                <div class="role-card">
+                    <div class="role-title">Trustee</div>
+                    <div class="role-identity">Grønli Court of Records<br>(NP-2025)</div>
+                    <div class="role-notes">Notary private authority, trusted archival governance</div>
+                </div>
+                <div class="role-card">
+                    <div class="role-title">Authorized Signatory / Executor</div>
+                    <div class="role-identity">Kim-Terje Rudschinat Grønli<br>(NP-2025)</div>
+                    <div class="role-notes">Notary & postmaster roles enable recognized signing authority</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Documents List -->
+        <div class="card documents-list">
+            <h2>📋 Registrerte Dokumenter</h2>
+            <div id="documentsList">
+                <!-- Documents will be populated here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // In-memory storage for the prototype
+        let documents = [];
+        let uploadedFiles = {
+            coverPage: null,
+            seal: null,
+            signature: null
+        };
+        
+        // Initialize with some sample data
+        documents = [
+            {
+                id: 1,
+                title: "Proof of Life",
+                seriesId: "PC-FN-3849",
+                receivedDate: "2025-07-03",
+                receivedBy: "Kim Terje Rudschinat Grønli",
+                status: "Komplett",
+                jurisdiction: "Grønli Court of Records",
+                notes: "Initial registration",
+                notaryDate: "2025-07-03",
+                hasCoverPage: true,
+                hasSeal: true,
+                hasSignature: true
+            },
+            {
+                id: 2,
+                title: "Trust Declaration",
+                seriesId: "SH-2025-0001",
+                receivedDate: "2025-07-15",
+                receivedBy: "Grønli Court of Records",
+                status: "Under behandling",
+                jurisdiction: "Sovereign House",
+                notes: "Pending notarization",
+                notaryDate: null,
+                hasCoverPage: true,
+                hasSeal: false,
+                hasSignature: false
+            }
+        ];
+
+        // File upload handling
+        function setupFileUpload(uploadId, fileInputId) {
+            const uploadArea = document.getElementById(uploadId);
+            const fileInput = document.getElementById(fileInputId);
+            
+            uploadArea.addEventListener('click', () => {
+                fileInput.click();
+            });
+            
+            uploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadArea.classList.add('dragover');
+            });
+            
+            uploadArea.addEventListener('dragleave', () => {
+                uploadArea.classList.remove('dragover');
+            });
+            
+            uploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadArea.classList.remove('dragover');
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    handleFileUpload(files[0], uploadId);
+                }
+            });
+            
+            fileInput.addEventListener('change', (e) => {
+                if (e.target.files.length > 0) {
+                    handleFileUpload(e.target.files[0], uploadId);
+                }
+            });
+        }
+        
+        function handleFileUpload(file, uploadType) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const fileType = uploadType.replace('Upload', '');
+                uploadedFiles[fileType] = {
+                    name: file.name,
+                    data: e.target.result,
+                    type: file.type
+                };
+                
+                // Update UI to show file uploaded
+                const uploadArea = document.getElementById(uploadType);
+                uploadArea.innerHTML = `<div style="color: #27ae60;">✅ ${file.name} lastet opp</div>`;
+            };
+            reader.readAsDataURL(file);
+        }
+        
+        // Initialize file uploads
+        setupFileUpload('coverPageUpload', 'coverPageFile');
+        setupFileUpload('sealUpload', 'sealFile');
+        setupFileUpload('signatureUpload', 'signatureFile');
+        
+        // Form submission
+        document.getElementById('documentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const newDocument = {
+                id: documents.length + 1,
+                title: formData.get('title'),
+                seriesId: formData.get('seriesId'),
+                receivedDate: new Date().toISOString().split('T')[0],
+                receivedBy: formData.get('receivedBy'),
+                status: 'Under behandling',
+                jurisdiction: formData.get('jurisdiction'),
+                notes: formData.get('notes'),
+                notaryDate: null,
+                hasCoverPage: uploadedFiles.coverPage !== null,
+                hasSeal: uploadedFiles.seal !== null,
+                hasSignature: uploadedFiles.signature !== null
+            };
+            
+            documents.push(newDocument);
+            updateDocumentsList();
+            
+            // Reset form and file uploads
+            this.reset();
+            resetFileUploads();
+            
+            alert('Dokument registrert!');
+        });
+        
+        function resetFileUploads() {
+            uploadedFiles = {
+                coverPage: null,
+                seal: null,
+                signature: null
+            };
+            
+            document.getElementById('coverPageUpload').innerHTML = '<div>📄 Dra og slipp cover page her eller klikk for å velge</div>';
+            document.getElementById('sealUpload').innerHTML = '<div>🏛️ Dra og slipp segl her eller klikk for å velge</div>';
+            document.getElementById('signatureUpload').innerHTML = '<div>✍️ Dra og slipp signatur her eller klikk for å velge</div>';
+        }
+        
+        function processNotarization() {
+            if (documents.length > 0) {
+                const latestDoc = documents[documents.length - 1];
+                if (latestDoc.status !== 'Komplett') {
+                    latestDoc.status = 'Komplett';
+                    latestDoc.notaryDate = new Date().toISOString().split('T')[0];
+                    updateDocumentsList();
+                    alert('Dokument notarisert og komplett!');
+                } else {
+                    alert('Det siste dokumentet er allerede komplett.');
+                }
+            }
+        }
+        
+        function archiveDocument() {
+            if (documents.length > 0) {
+                const latestDoc = documents[documents.length - 1];
+                latestDoc.status = 'Arkivert';
+                updateDocumentsList();
+                alert('Dokument arkivert!');
+            }
+        }
+        
+        function updateDocumentsList() {
+            const container = document.getElementById('documentsList');
+            
+            if (documents.length === 0) {
+                container.innerHTML = '<p>Ingen dokumenter registrert ennå.</p>';
+                return;
+            }
+            
+            container.innerHTML = documents.map(doc => `
+                <div class="document-item">
+                    <div class="document-header">
+                        <div>
+                            <div class="document-title">${doc.title}</div>
+                            <div class="document-series">${doc.seriesId}</div>
+                        </div>
+                        <div class="document-status status-${doc.status.toLowerCase().replace(' ', '-')}">${doc.status}</div>
+                    </div>
+                    
+                    <div class="document-details">
+                        <div class="detail-item">
+                            <div class="detail-label">Mottatt dato</div>
+                            <div class="detail-value">${doc.receivedDate}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Jurisdiksjon</div>
+                            <div class="detail-value">${doc.jurisdiction}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Mottatt av</div>
+                            <div class="detail-value">${doc.receivedBy}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Cover Page</div>
+                            <div class="detail-value">${doc.hasCoverPage ? '✅' : '❌'}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Segl</div>
+                            <div class="detail-value">${doc.hasSeal ? '✅' : '❌'}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Signatur</div>
+                            <div class="detail-value">${doc.hasSignature ? '✅' : '❌'}</div>
+                        </div>
+                    </div>
+                    
+                    ${doc.notes ? `<div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #e9ecef;"><strong>Notater:</strong> ${doc.notes}</div>` : ''}
+                    ${doc.notaryDate ? `<div style="margin-top: 10px;"><strong>Notarisert:</strong> ${doc.notaryDate}</div>` : ''}
+                </div>
+            `).join('');
+        }
+        
+        // Initialize the documents list
+        updateDocumentsList();
+    </script>
+</body>
+</html>
