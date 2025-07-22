@@ -1,6 +1,8 @@
 # Grønli Registrar Database System
 
-A comprehensive document registration and notarization system prototype designed for sovereign trust and governance. This project includes both frontend and backend components for managing documents with legal and notarial relevance, featuring key governance roles.
+A comprehensive document registration and notarization system prototype designed for sovereign trust and governance. 
+
+This project includes both frontend and backend components for managing documents with legal and notarial relevance, featuring key governance roles.
 
 ---
 
@@ -16,12 +18,56 @@ Check out the live frontend demo here:
 ### Frontend
 - Intuitive document registration form  
 - Drag & drop file uploads for cover pages, seals, and notarized signatures  
-- Document status workflow: *Under behandling* → *Komplett* → *Arkivert*  
+- Document status workflow:
+- *Under behandling* → *Komplett* → *Arkivert*  
 - Visual list of all registered documents with detailed metadata  
 - Key role display for governance:  
   - Grantor / Settlor (Kim Terje Rudschinat Grønli)  
   - Trustee (Grønli Court of Records)  
-  - Authorized Signatory / Executor (Kim-Terje Rudschinat Grønli)  
+  - Authorized Signatory / Executor (Kim-Terje Rudschinat Grønli)
+ 
+  - Key Features:
+🔐 Three Key Roles Integration
+
+Grantor/Settlor: Kim Terje Rudschinat Grønli (PC-FN-3849, KTR-2025)
+Trustee: Grønli Court of Records (NP-2025)
+Authorized Signatory: Kim-Terje Rudschinat Grønli (NP-2025)
+
+📄 Document Registration System
+
+Title and series number tracking
+Jurisdiction selection (Grønli Court of Records, Sovereign House, AKFNS)
+Received by tracking with the key roles
+Status management (Under behandling → Komplett → Arkivert)
+
+📎 File Management
+
+Cover Page upload (PDF, images)
+Seal/Stamp upload (images)
+Notarisk signatur upload (PDF, images)
+Drag & drop functionality for easy file handling
+
+🏛️ Notarization Process
+
+One-click notarization with date stamping
+Status progression tracking
+Archive functionality
+
+📋 Document Archive
+
+Visual list of all registered documents
+Status indicators with color coding
+File attachment tracking (✅/❌ indicators)
+Document details display
+
+How to Use:
+
+Register Document: Fill in title, series number (like PC-FN-3849), select jurisdiction and receiver
+Upload Files: Drag & drop or click to upload cover page, seal, and signature
+Notarize: Click "Notariser Dokument" to complete the notarization process
+Archive: Click "Arkiver Dokument" to move to archived status
+
+The system includes sample data (Proof of Life with PC-FN-3849) and is fully functional as a prototype. All data is stored in memory for this demo version, but the structure is designed to easily connect to a SQL database using the table schemas from your document.
 
 ### Backend
 - REST API built with Node.js and Express  
@@ -76,6 +122,7 @@ Open index.html in your browser or deploy it to a static hosting service and con
 
 API Documentation
 The backend exposes RESTful API endpoints under /api with JWT authentication.
+
 Refer to API Documentation for detailed information on available routes, request/response formats, and authentication.
 
 Project Structure
@@ -110,7 +157,7 @@ Edit
 
 ---
 
-If you want, I can help you draft the `API_DOCUMENTATION.md` or add example usage with Postman too!
+
 
 
 
@@ -135,7 +182,9 @@ Check out the live frontend demo here:
 ### Frontend
 - Intuitive document registration form  
 - Drag & drop file uploads for cover pages, seals, and notarized signatures  
-- Document status workflow: *Under behandling* → *Komplett* → *Arkivert*  
+- Document status workflow:
+- *Under behandling* → *Komplett* → *Arkivert*
+   
 - Visual list of all registered documents with detailed metadata  
 - Key role display for governance:  
   - Grantor / Settlor (Kim Terje Rudschinat Grønli)  
