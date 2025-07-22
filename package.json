@@ -1,6 +1,7 @@
 {
   "name": "groenli-registrar-backend",
   "version": "1.0.0",
+   "type": "module",
   "description": "Backend API for Grønli Registrar Database System",
   "main": "server.js",
   "scripts": {
